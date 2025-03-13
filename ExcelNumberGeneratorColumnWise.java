@@ -1,8 +1,10 @@
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+// import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
-// Remove conflicting logging dependencies
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,13 +13,14 @@ public class ExcelNumberGeneratorColumnWise {
 
     public static void main(String[] args) {
         long startNumber = 7000000001L;
-        long endNumber = 7999999999L;
+        long endNumber = 7000000100L;
         int maxRows = 1048576; // Excel has 1,048,576 max rows per sheet
-        int maxCols = 26; // A to Z (26 columns)
+        int maxCols = 16384; // A to Z (26 columns)
         String filePath = "GeneratedNumbers.xlsx";
 
         // Create Workbook
-        Workbook workbook = new XSSFWorkbook();
+        SXSSFWorkbook workbook = new SXSSFWorkbook();
+        // Workbook workbook = new XSSFWorkbook();
         int sheetNumber = 1;
         Sheet sheet = workbook.createSheet("Sheet_" + sheetNumber);
 
@@ -37,17 +40,17 @@ public class ExcelNumberGeneratorColumnWise {
             cell.setCellValue(currentNumber);
             currentNumber++;
 
-            // Move to the next column
-            colIndex++;
+            // Move to the next row
+            rowIndex++;
 
             // If column limit is reached, move to the next row and reset column index
-            if (colIndex >= maxCols) {
-                colIndex = 0;
-                rowIndex++;
+            if (rowIndex >= maxRows) {
+                rowIndex = 0;
+                colIndex++;
             }
 
             // If row limit is reached, create a new sheet and reset indexes
-            if (rowIndex >= maxRows) {
+            if (colIndex >= maxCols) {
                 sheetNumber++;
                 sheet = workbook.createSheet("Sheet_" + sheetNumber);
                 rowIndex = 0;
