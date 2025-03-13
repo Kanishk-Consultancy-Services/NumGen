@@ -43,13 +43,13 @@ public class ExcelNumberGeneratorColumnWise {
             // Move to the next row
             rowIndex++;
 
-            // If column limit is reached, move to the next row and reset column index
+            // If row limit is reached, move to the next column and reset row index
             if (rowIndex >= maxRows) {
                 rowIndex = 0;
                 colIndex++;
             }
 
-            // If row limit is reached, create a new sheet and reset indexes
+            // If column limit is reached, create a new sheet and reset indexes
             if (colIndex >= maxCols) {
                 sheetNumber++;
                 sheet = workbook.createSheet("Sheet_" + sheetNumber);
